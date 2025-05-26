@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة العمال</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+        }
+        .login-card {
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .login-header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .login-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0;
+        }
+        .login-body {
+            padding: 30px;
+        }
+        .login-footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #eee;
+        }
+        .btn-login {
+            background-color: #007bff;
+            border-color: #007bff;
+            width: 100%;
+            padding: 10px;
+            font-weight: bold;
+        }
+        .form-control {
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+        .login-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="login-container">
+            <div class="card login-card">
+                <div class="login-header">
+                    <i class="bi bi-people-fill login-icon"></i>
+                    <h1>نظام إدارة العمال</h1>
+                    <p>تسجيل الدخول للوصول إلى لوحة التحكم</p>
+                </div>
+                <div class="login-body">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">اسم المستخدم</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                <input type="text" class="form-control" id="username" placeholder="أدخل اسم المستخدم" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">كلمة المرور</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input type="password" class="form-control" id="password" placeholder="أدخل كلمة المرور" required>
+                            </div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">تذكرني</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-login">تسجيل الدخول</button>
+                    </form>
+                </div>
+                <div class="login-footer">
+                    <p class="mb-0">هل نسيت كلمة المرور؟ <a href="#">اضغط هنا</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // إرسال بيانات تسجيل الدخول إلى الخادم
+            fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // تم تسجيل الدخول بنجاح
+                    window.location.href = '/dashboard';
+                } else {
+                    // فشل تسجيل الدخول
+                    alert('خطأ في اسم المستخدم أو كلمة المرور');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('حدث خطأ أثناء تسجيل الدخول');
+            });
+        });
+    </script>
+</body>
+</html>
